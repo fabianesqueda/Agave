@@ -1,6 +1,8 @@
 #include "Agave.hpp"
 #include <iostream>
 
+// Simple module I use to generate sinewaves and white noise. Will be growing as my development needs increase.
+
 struct AgaveTestEngine : Module {
 
 	enum ParamIds {
