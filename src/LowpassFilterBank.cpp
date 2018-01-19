@@ -4,7 +4,8 @@
 struct RCFilter {
 
 	// Class to implement a simple RC filter discretized using trapezoidal rule.
-	// TODO: Pre-Warping
+	// TODO: Investigate how does Rack deal with changes in Sampling Rate and find optimal location
+	// pre-warping of the cutoff frequency.
 
 	// Filter state variables
 	float outputSample = 0.0;
@@ -18,6 +19,7 @@ struct RCFilter {
 	void process(float input, float sampleRate) {
 
 		float alpha = 2*sampleRate/wc;
+
 
 		// Compute filter output
 		outputSample = ( (alpha - 1)*outputSample + input + previousInput ) / (1 + alpha);
@@ -63,6 +65,8 @@ struct LowpassFilterBank : Module {
 	}
 
 	void step() override;
+
+	// TODO: reset()
 
 };
 

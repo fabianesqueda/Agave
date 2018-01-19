@@ -9,11 +9,14 @@ extern Plugin *plugin;
 // module widgets
 ////////////////////
 
+struct AgaveTestEngineWidget : ModuleWidget {
+	AgaveTestEngineWidget();
+};
+
 struct LowpassFilterBankWidget : ModuleWidget {
 	LowpassFilterBankWidget();
 };
 
-
-struct AgaveTestEngineWidget : ModuleWidget {
-	AgaveTestEngineWidget();
+struct WavefolderWidget : ModuleWidget {
+	WavefolderWidget();
 };
