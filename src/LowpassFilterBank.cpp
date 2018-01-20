@@ -1,30 +1,37 @@
 #include "Agave.hpp"
 #include <iostream>
 
-struct RCFilter {
+class RCFilter {
 
 	// Class to implement a simple RC filter discretized using trapezoidal rule.
 	// TODO: Investigate how does Rack deal with changes in Sampling Rate and find optimal location
 	// pre-warping of the cutoff frequency.
 
-	// Filter state variables
+public:
+
 	float outputSample = 0.0;
 	float previousInput = 0.0;
 	float wc = 0.0;
 
+
 	RCFilter() { }
 
-	void setCutoff(float cutoffFrequency) {	wc = 2*M_PI*cutoffFrequency; }
+	~RCFilter() { }
+
+	void setCutoff(float cutoffFrequency, float sampleRate) {	
+		
+		wc = 2*M_PI*cutoffFrequency; 				// wc in radians/second
+		wc = 2*atan(0.5*wc/sampleRate)*sampleRate;	// Cutoff pre-warping
+	}
 
 	void process(float input, float sampleRate) {
 
 		float alpha = 2*sampleRate/wc;
 
-
 		// Compute filter output
 		outputSample = ( (alpha - 1)*outputSample + input + previousInput ) / (1 + alpha);
 
-		// Update States
+		// Update State
 		previousInput = input;
 
 	}
@@ -52,21 +59,20 @@ struct LowpassFilterBank : Module {
 		NUM_LIGHTS
 	};
 
-	float phase = 0.0;
-	float blinkPhase = 0.0;
 	float cutoffFrequencies[6] = {78.0, 198.0, 373.0, 692.0, 1411.0, 3.0e3};
 
 	RCFilter filter[6];
 
 	LowpassFilterBank() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
 		for (int i = 0; i < 6; i++) {
-			filter[i].setCutoff(cutoffFrequencies[i]);
+			filter[i].setCutoff(cutoffFrequencies[i], engineGetSampleRate());
 		}
 	}
 
 	void step() override;
 
 	// TODO: reset()
+	// TODO: onSampleRateChange()
 
 };
 

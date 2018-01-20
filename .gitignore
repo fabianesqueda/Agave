@@ -36,3 +36,5 @@ Makefile
 *.exe
 *.out
 *.app
+
+Wavefolder.cpp
