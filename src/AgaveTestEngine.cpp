@@ -1,7 +1,8 @@
 #include "Agave.hpp"
 #include <iostream>
 
-// Simple module I use to generate sinewaves and white noise. Will be growing as my development needs increase.
+// Simple module I use to generate sinewaves and white noise. It's basically an extension of Andrew's tutorial.
+// Will be growing as my development needs increase, feel free to use.
 
 struct AgaveTestEngine : Module {
 
