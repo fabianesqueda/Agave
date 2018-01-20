@@ -15,6 +15,7 @@ struct AgaveTestEngine : Module {
 	};
 	enum OutputIds {
 		SINE_OUTPUT,
+		SQUARE_OUTPUT,
 		NOISE_OUTPUT,
 		NUM_OUTPUTS
 	};
@@ -78,7 +79,8 @@ AgaveTestEngineWidget::AgaveTestEngineWidget() {
 	addParam(createParam<Davies1900hBlackKnob>(Vec(13, 87), module, AgaveTestEngine::PITCH_PARAM, -3.0, 3.0, 0.0));
 
 	// SINE OUTPUT
-	addOutput(createOutput<PJ301MPort>(Vec(18, 186), module, AgaveTestEngine::SINE_OUTPUT));
-	addOutput(createOutput<PJ301MPort>(Vec(18, 275), module, AgaveTestEngine::NOISE_OUTPUT));
+	addOutput(createOutput<PJ301MPort>(Vec(18, 180), module, AgaveTestEngine::SINE_OUTPUT));
+	addOutput(createOutput<PJ301MPort>(Vec(18, 230), module, AgaveTestEngine::SQUARE_OUTPUT));
+	addOutput(createOutput<PJ301MPort>(Vec(18, 280), module, AgaveTestEngine::NOISE_OUTPUT));
 
 }
