@@ -9,7 +9,8 @@ class RCFilter {
 
 public:
 
-	float outputSample = 0.0;
+	float lowpassOutput = 0.0;
+	float highpassOutput = 0.0;
 	float previousInput = 0.0;
 	float wc = 0.0;
 
@@ -29,7 +30,8 @@ public:
 		float alpha = 2*sampleRate/wc;
 
 		// Compute filter output
-		outputSample = ( (alpha - 1)*outputSample + input + previousInput ) / (1 + alpha);
+		lowpassOutput = ( (alpha - 1)*lowpassOutput + input + previousInput ) / (1 + alpha);
+		highpassOutput = input - lowpassOutput;
 
 		// Update State
 		previousInput = input;
@@ -84,22 +86,22 @@ void LowpassFilterBank::step() {
 	float input = inputs[SIGNAL_INPUT].value;
 
 	filter[0].process(input, engineGetSampleRate());
-	outputs[FILTER_LOW_OUTPUT].value = filter[0].outputSample;
+	outputs[FILTER_LOW_OUTPUT].value = filter[0].lowpassOutput;
 
 	filter[1].process(input, engineGetSampleRate());
-	outputs[FILTER_198_OUTPUT].value = filter[1].outputSample;
+	outputs[FILTER_198_OUTPUT].value = filter[1].lowpassOutput;
 
 	filter[2].process(input, engineGetSampleRate());
-	outputs[FILTER_373_OUTPUT].value = filter[2].outputSample;
+	outputs[FILTER_373_OUTPUT].value = filter[2].lowpassOutput;
 
 	filter[3].process(input, engineGetSampleRate());
-	outputs[FILTER_692_OUTPUT].value = filter[3].outputSample;
+	outputs[FILTER_692_OUTPUT].value = filter[3].lowpassOutput;
 
 	filter[4].process(input, engineGetSampleRate());
-	outputs[FILTER_1411_OUTPUT].value = filter[4].outputSample;
+	outputs[FILTER_1411_OUTPUT].value = filter[4].lowpassOutput;
 
 	filter[5].process(input, engineGetSampleRate());
-	outputs[FILTER_HIGH_OUTPUT].value = filter[5].outputSample;
+	outputs[FILTER_HIGH_OUTPUT].value = filter[5].lowpassOutput;
 
 }
 

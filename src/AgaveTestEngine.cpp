@@ -4,6 +4,64 @@
 // Simple module I use to generate sinewaves and white noise. It's basically an extension of Andrew's tutorial.
 // Will be growing as my development needs increase, feel free to use.
 
+class DPWSawtooth {
+
+// This class generates a first-order DPW sawtooth suitable for testing.
+
+public:
+
+	float sampleRate;
+	float state = 0.0;
+	float phase = 0.0;
+	float output = 0.0;
+
+	DPWSawtooth(float SR) : sampleRate(SR) {}
+
+	~DPWSawtooth() {}
+
+	void overridePhase(float ph) { phase = ph;	}
+
+	void generateSamples(float f0) {
+
+		float delta = f0/sampleRate;
+		float scalingFactor = sampleRate/(4.0*f0*(1.0-delta));
+		float modPhase = 2.0*phase - 1.0;
+		float parWaveform = modPhase*modPhase;
+		float dyWaveform = parWaveform - state;
+
+		state = parWaveform;
+		output = scalingFactor * dyWaveform; 
+
+		phase += delta;
+		if (phase >= 1.0)
+			phase -= 1.0;
+	}
+
+};
+
+class DPWSquare {
+
+// This class generates a first-order DPW sawtooth suitable for testing.
+
+public:
+
+	float output = 0.0;
+
+	DPWSawtooth sawtoothOne{engineGetSampleRate()};
+	DPWSawtooth sawtoothTwo{engineGetSampleRate()};
+
+	DPWSquare() { sawtoothTwo.overridePhase(0.5); }
+	~DPWSquare() {}
+
+	void generateSamples(float f0) {
+
+		sawtoothOne.generateSamples(f0);
+		sawtoothTwo.generateSamples(f0);
+		output = sawtoothOne.output - sawtoothTwo.output;
+	}
+
+};
+
 struct AgaveTestEngine : Module {
 
 	enum ParamIds {
@@ -15,6 +73,7 @@ struct AgaveTestEngine : Module {
 	};
 	enum OutputIds {
 		SINE_OUTPUT,
+		SAW_OUTPUT,
 		SQUARE_OUTPUT,
 		NOISE_OUTPUT,
 		NUM_OUTPUTS
@@ -25,6 +84,10 @@ struct AgaveTestEngine : Module {
 
 	float phase = 0.0;
 	float blinkPhase = 0.0;
+
+	DPWSawtooth sawtoothGenerator{engineGetSampleRate()};
+
+	DPWSquare squareWaveGenerator;
 
 	AgaveTestEngine() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
 	void step() override;
@@ -58,6 +121,14 @@ void AgaveTestEngine::step() {
 	// Output sine
 	outputs[SINE_OUTPUT].value = 5.0 * sine;
 
+	// Output sawtooth
+	sawtoothGenerator.generateSamples(freq);
+	outputs[SAW_OUTPUT].value = 5.0 * sawtoothGenerator.output;
+
+	// Output square wave
+	squareWaveGenerator.generateSamples(freq);
+	outputs[SQUARE_OUTPUT].value = 5.0 * squareWaveGenerator.output;
+
 	// Generate white noise
 	outputs[NOISE_OUTPUT].value = 5.0 * (2.0 * randomf() - 1.0);
 
@@ -80,7 +151,8 @@ AgaveTestEngineWidget::AgaveTestEngineWidget() {
 
 	// SINE OUTPUT
 	addOutput(createOutput<PJ301MPort>(Vec(18, 180), module, AgaveTestEngine::SINE_OUTPUT));
-	addOutput(createOutput<PJ301MPort>(Vec(18, 230), module, AgaveTestEngine::SQUARE_OUTPUT));
-	addOutput(createOutput<PJ301MPort>(Vec(18, 280), module, AgaveTestEngine::NOISE_OUTPUT));
+	addOutput(createOutput<PJ301MPort>(Vec(18, 230), module, AgaveTestEngine::SAW_OUTPUT));
+	addOutput(createOutput<PJ301MPort>(Vec(18, 280), module, AgaveTestEngine::SQUARE_OUTPUT));
+	addOutput(createOutput<PJ301MPort>(Vec(18, 330), module, AgaveTestEngine::NOISE_OUTPUT));
 
 }
