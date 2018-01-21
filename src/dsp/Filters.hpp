@@ -1,3 +1,17 @@
+// THIS CLASS IMPLEMENTES A FIRST-ORDER LOWPASS FILTER DERIVED FROM THE TRANSFER FUNCTION OF A
+// SIMPLE PASSIVE RC FILTER. THE FILTER IS PARAMETRIZED BY SETTING THE CUTOFF FREQUENCY IN HZ
+// I.E. fc = 1 / (2*pi*R*C)
+//
+// THIS CODE IS PROVIDED "AS-IS", WITH NO GUARANTEE OF ANY KIND.
+// 
+// CODED BY F. ESQUEDA - NOVEMBER 2016
+// 
+// ADAPTED FOR VCV RACK JANUARY 2018
+// 
+// TODO: 
+// 		HANDLE CHANGES IN SAMPLE RATE
+// 		ADD MORE STANDARD FILTERS
+
 #pragma once
 
 class RCFilter {
@@ -17,8 +31,8 @@ public:
 
 	~RCFilter() { }
 
-	void setCutoff(float cutoffFrequency, float sampleRate) {	
-		
+	void setCutoff(float cutoffFrequency, float sampleRate) {
+
 		wc = 2*M_PI*cutoffFrequency; 				// wc in radians/second
 		wc = 2*atan(0.5*wc/sampleRate)*sampleRate;	// Cutoff pre-warping
 	}
