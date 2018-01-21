@@ -1,66 +1,7 @@
 #include "Agave.hpp"
 #include <iostream>
 
-// Simple module I use to generate sinewaves and white noise. It's basically an extension of Andrew's tutorial.
-// Will be growing as my development needs increase, feel free to use.
-
-class DPWSawtooth {
-
-// This class generates a first-order DPW sawtooth suitable for testing.
-
-public:
-
-	float sampleRate;
-	float state = 0.0;
-	float phase = 0.0;
-	float output = 0.0;
-
-	DPWSawtooth(float SR) : sampleRate(SR) {}
-
-	~DPWSawtooth() {}
-
-	void overridePhase(float ph) { phase = ph;	}
-
-	void generateSamples(float f0) {
-
-		float delta = f0/sampleRate;
-		float scalingFactor = sampleRate/(4.0*f0*(1.0-delta));
-		float modPhase = 2.0*phase - 1.0;
-		float parWaveform = modPhase*modPhase;
-		float dyWaveform = parWaveform - state;
-
-		state = parWaveform;
-		output = scalingFactor * dyWaveform; 
-
-		phase += delta;
-		if (phase >= 1.0)
-			phase -= 1.0;
-	}
-
-};
-
-class DPWSquare {
-
-// This class generates a first-order DPW sawtooth suitable for testing.
-
-public:
-
-	float output = 0.0;
-
-	DPWSawtooth sawtoothOne{engineGetSampleRate()};
-	DPWSawtooth sawtoothTwo{engineGetSampleRate()};
-
-	DPWSquare() { sawtoothTwo.overridePhase(0.5); }
-	~DPWSquare() {}
-
-	void generateSamples(float f0) {
-
-		sawtoothOne.generateSamples(f0);
-		sawtoothTwo.generateSamples(f0);
-		output = sawtoothOne.output - sawtoothTwo.output;
-	}
-
-};
+#include "dsp/DPWOsc.hpp"
 
 struct AgaveTestEngine : Module {
 
@@ -106,6 +47,7 @@ void AgaveTestEngine::step() {
 	float deltaTime = 1.0 / SR;
 
 	// Compute the frequency from the pitch parameter and input
+	// TODO: Convert to log. Linear frequency pots suck.
 	float pitch = params[PITCH_PARAM].value;
 	pitch = clampf(pitch, -4.0, 4.0);
 	float freq = 440.0 * powf(2.0, pitch);
