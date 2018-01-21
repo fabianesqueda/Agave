@@ -4,4 +4,6 @@ This is a collection of free open-source modules for VCV Rack. This is an ongoin
 
 None of the modules is ready for release yet, but feel free to take them out for a spin. You can probably figure out how the modules work by examining the code, I'll be working on the front panels soon!
 
+Instructions on how to load these modules into your VCV Rack development environment can be found [here](https://github.com/VCVRack/Rack) under "Building plugins".
+
 -Fabian
