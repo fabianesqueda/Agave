@@ -3,6 +3,7 @@
 
 #include "dsp/DPWOsc.hpp"
 
+
 struct AgaveTestEngine : Module {
 
 	enum ParamIds {
@@ -26,7 +27,7 @@ struct AgaveTestEngine : Module {
 	float phase = 0.0;
 	float blinkPhase = 0.0;
 
-	DPWSawtooth sawtoothGenerator{engineGetSampleRate()};
+	DPWSawtooth sawtoothGenerator;
 
 	DPWSquare squareWaveGenerator;
 

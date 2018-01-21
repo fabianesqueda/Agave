@@ -6,12 +6,12 @@ class DPWSawtooth {
 
 public:
 
-	float sampleRate;
+	float sampleRate{engineGetSampleRate()};
 	float state = 0.0;
 	float phase = 0.0;
 	float output = 0.0;
 
-	DPWSawtooth(float SR) : sampleRate(SR) {}
+	DPWSawtooth() {}
 
 	~DPWSawtooth() {}
 
@@ -43,8 +43,8 @@ public:
 
 	float output = 0.0;
 
-	DPWSawtooth sawtoothOne{engineGetSampleRate()};
-	DPWSawtooth sawtoothTwo{engineGetSampleRate()};
+	DPWSawtooth sawtoothOne;
+	DPWSawtooth sawtoothTwo;
 
 	DPWSquare() { sawtoothTwo.overridePhase(0.5); }
 	~DPWSquare() {}

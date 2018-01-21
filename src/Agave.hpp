@@ -20,3 +20,7 @@ struct LowpassFilterBankWidget : ModuleWidget {
 struct WavefolderWidget : ModuleWidget {
 	WavefolderWidget();
 };
+
+struct MetallicNoiseWidget : ModuleWidget {
+	MetallicNoiseWidget();
+};
