@@ -33,7 +33,6 @@ private:
 public:
 
 	DPWSawtooth() {}
-
 	~DPWSawtooth() {}
 
 	void overridePhase(const float &newPhase) { phase = newPhase; }
@@ -72,7 +71,6 @@ private:
 public:
 
 	DPWSquare() { sawtoothTwo.overridePhase(0.5); }
-
 	~DPWSquare() {}
 
 	void generateSamples(float f0) {
