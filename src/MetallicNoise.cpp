@@ -39,6 +39,9 @@ struct MetallicNoise : Module {
 	DPWSquare squareWaves808[6];
 	DPWSquare squareWaves606[6];
 
+	float oscFrequencies808[6] = {205.3, 369.4, 304.4, 522.3, 800.0, 540.4};
+	float oscFrequencies606[6] = {244.4, 304.6, 364.5, 412.1, 432.4, 604.1};
+
 	MetallicNoise() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {	}
 
 	void step() override;
@@ -51,20 +54,17 @@ struct MetallicNoise : Module {
 
 void MetallicNoise::step() {
 
-	float oscFrequencies808[6] = {205.3, 369.4, 304.4, 522.3, 800.0, 540.4};
-	float oscFrequencies606[6] = {244.4, 304.6, 364.5, 412.1, 432.4, 604.1};
-
 	float output808 = 0.0;
 	for (int i=0; i<6; i++) {
 		squareWaves808[i].generateSamples(oscFrequencies808[i]);
-		output808 += squareWaves808[i].output;
+		output808 += squareWaves808[i].getSquareWaveform();
 	}
 	outputs[NOISE_808_OUTPUT].value = 5.0 * 0.1666 * output808;
 
 	float output606 = 0.0;
 	for (int i=0; i<6; i++) {
 		squareWaves606[i].generateSamples(oscFrequencies606[i]);
-		output606 += squareWaves606[i].output;
+		output606 += squareWaves606[i].getSquareWaveform();
 	}
 	outputs[NOISE_606_OUTPUT].value = 5.0 * 0.1666 * output606;
 

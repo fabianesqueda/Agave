@@ -33,12 +33,14 @@ struct LowpassFilterBank : Module {
 		NUM_LIGHTS
 	};
 
+	// Six-band filter bank
+	RCFilter filter[NUM_OUTPUTS];
+
+	// In Hz
 	float cutoffFrequencies[6] = {78.0, 198.0, 373.0, 692.0, 1411.0, 3.0e3};
 
-	RCFilter filter[6];
-
 	LowpassFilterBank() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < NUM_OUTPUTS; i++) {
 			filter[i] = RCFilter(cutoffFrequencies[i], engineGetSampleRate());
 		}
 	}
@@ -53,27 +55,12 @@ struct LowpassFilterBank : Module {
 
 void LowpassFilterBank::step() {
 
-	// Read audio input
-	// TODO: Add LED to check for high-hain input
 	float input = inputs[SIGNAL_INPUT].value;
 
-	filter[0].process(input, engineGetSampleRate());
-	outputs[FILTER_LOW_OUTPUT].value = filter[0].getLowpassOutput();
-
-	filter[1].process(input, engineGetSampleRate());
-	outputs[FILTER_198_OUTPUT].value = filter[1].getLowpassOutput();
-
-	filter[2].process(input, engineGetSampleRate());
-	outputs[FILTER_373_OUTPUT].value = filter[2].getLowpassOutput();
-
-	filter[3].process(input, engineGetSampleRate());
-	outputs[FILTER_692_OUTPUT].value = filter[3].getLowpassOutput();
-
-	filter[4].process(input, engineGetSampleRate());
-	outputs[FILTER_1411_OUTPUT].value = filter[4].getLowpassOutput();
-
-	filter[5].process(input, engineGetSampleRate());
-	outputs[FILTER_HIGH_OUTPUT].value = filter[5].getLowpassOutput();
+	for (int i=0; i<NUM_OUTPUTS; i++) {
+		filter[i].process(input, engineGetSampleRate());
+		outputs[i].value = filter[i].getLowpassOutput();		
+	}
 
 }
 

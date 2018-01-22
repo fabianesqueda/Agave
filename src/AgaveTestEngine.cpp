@@ -42,6 +42,7 @@ struct AgaveTestEngine : Module {
 
 
 void AgaveTestEngine::step() {
+
 	float SR = engineGetSampleRate();
 
 	// Implement a simple sine oscillator
@@ -65,11 +66,11 @@ void AgaveTestEngine::step() {
 
 	// Output sawtooth
 	sawtoothGenerator.generateSamples(freq);
-	outputs[SAW_OUTPUT].value = 5.0 * sawtoothGenerator.output;
+	outputs[SAW_OUTPUT].value = 5.0 * sawtoothGenerator.getSawtoothWaveform();
 
 	// Output square wave
 	squareWaveGenerator.generateSamples(freq);
-	outputs[SQUARE_OUTPUT].value = 5.0 * squareWaveGenerator.output;
+	outputs[SQUARE_OUTPUT].value = 5.0 * squareWaveGenerator.getSquareWaveform();
 
 	// Generate white noise
 	outputs[NOISE_OUTPUT].value = 5.0 * (2.0 * randomf() - 1.0);

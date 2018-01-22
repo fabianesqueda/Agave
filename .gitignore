@@ -1,5 +1,6 @@
 # # # # #
 /build
+/dist
 .DS_Store
 Makefile
 # # # # #
@@ -37,6 +38,6 @@ Makefile
 *.out
 *.app
 
+# Specific Files
 Wavefolder.cpp
 Wavefolder2.cpp
-dist

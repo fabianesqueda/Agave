@@ -1,6 +1,4 @@
-// THIS CLASS IMPLEMENTES A FIRST-ORDER LOWPASS FILTER DERIVED FROM THE TRANSFER FUNCTION OF A
-// SIMPLE PASSIVE RC FILTER. THE FILTER IS PARAMETRIZED BY SETTING THE CUTOFF FREQUENCY IN HZ
-// I.E. fc = 1 / (2*pi*R*C)
+// MULTIPLE FILTER CLASSES
 //
 // THIS CODE IS PROVIDED "AS-IS", WITH NO GUARANTEE OF ANY KIND.
 // 
@@ -16,7 +14,10 @@
 
 class RCFilter {
 
-	// Class to implement a simple RC filter discretized using trapezoidal rule.
+	// THIS CLASS IMPLEMENTES A FIRST-ORDER LOWPASS FILTER DERIVED FROM THE TRANSFER FUNCTION OF A
+	// SIMPLE PASSIVE RC FILTER. THE FILTER IS PARAMETRIZED BY SETTING THE CUTOFF FREQUENCY IN HZ
+	// I.E. fc = 1 / (2*pi*R*C)
+	//
 	// TODO: Investigate how does Rack deal with changes in Sampling Rate and find optimal location
 	// pre-warping of the cutoff frequency.
 
@@ -26,11 +27,13 @@ private:
 	float previousInput = 0.0;
 	float wc = 0.0;
 
-	RCFilter() {}
-	RCFilter(float cutoffFrequency, float sampleRate) { setCutoff(cutoffFrequency, sampleRate); }
-	~RCFilter() { }
-
 public:
+
+	RCFilter() {}
+	
+	RCFilter(float cutoffFrequency, float sampleRate) { setCutoff(cutoffFrequency, sampleRate); }
+
+	~RCFilter() { }
 
 	void setCutoff(const float &cutoffFrequency, const float &sampleRate) {
 
