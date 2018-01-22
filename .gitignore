@@ -40,4 +40,5 @@ Makefile
 
 # Specific Files
 Wavefolder.cpp
-Wavefolder2.cpp
+Wavefolder_Soft
+SharpWavefolder.cpp

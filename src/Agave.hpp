@@ -17,10 +17,11 @@ struct LowpassFilterBankWidget : ModuleWidget {
 	LowpassFilterBankWidget();
 };
 
-struct WavefolderWidget : ModuleWidget {
-	WavefolderWidget();
+struct SharpWavefolderWidget : ModuleWidget {
+	SharpWavefolderWidget();
 };
 
 struct MetallicNoiseWidget : ModuleWidget {
 	MetallicNoiseWidget();
 };
+

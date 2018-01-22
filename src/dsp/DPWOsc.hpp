@@ -5,8 +5,8 @@
 // V. VÄLIMÄKI, JUHAN NAM AND JULIUS SMITH
 // IEEE TRANS. AUDIO, SPEECH, LANGUAGE PROCESS. (MAY 2010)
 // 
-// NOTES: THE DPW IS SIMPLE AND WORKS FINE IN SOME APPLICATIONS. HOWEVER, IT'S NOT SUITABLE
-// FOR APPLICATIONS REQUIRING TIME-VARYING PITCH MODULATION OR OSCILLATOR SYNCHRONIZATION. FOR
+// NOTES: THE DPW METHOD IS SIMPLE AND WORKS FINE FOR MOST TRIVIAL APPLICATIONS. HOWEVER, IT'S
+// NOT RECOMMENDED FOR APPLICATIONS REQUIRING TIME-VARYING PITCH MODULATION OR OSCILLATOR SYNCHRONIZATION. FOR
 // MORE ROBUST ALGORITHMS SEE THE E-PTR AND POLYBLEP METHODS.
 //
 // THIS CODE IS PROVIDED "AS-IS", WITH NO GUARANTEE OF ANY KIND.
@@ -39,9 +39,10 @@ public:
 
 	void generateSamples(const float &f0) {
 
+		// Implement DPW algorithm
 		float delta = f0/sampleRate;
-		float scalingFactor = sampleRate/(4*f0);
-		float modPhase = 2.0*phase - 1.0;
+		float scalingFactor = sampleRate/(4.0f*f0);
+		float modPhase = 2.0f*phase - 1.0f;
 		float parWaveform = modPhase*modPhase;
 		float dyWaveform = parWaveform - state;
 
@@ -49,8 +50,8 @@ public:
 		output = scalingFactor * dyWaveform; 
 
 		phase += delta;
-		if (phase >= 1.0)
-			phase -= 1.0;
+		if (phase >= 1.0f)
+			phase -= 1.0f;
 	}
 
 	float getSawtoothWaveform() {
@@ -70,10 +71,12 @@ private:
 
 public:
 
-	DPWSquare() { sawtoothTwo.overridePhase(0.5); }
+	DPWSquare() { sawtoothTwo.overridePhase(0.5f); }
 	~DPWSquare() {}
 
-	void generateSamples(float f0) {
+	void generateSamples(const float &f0) {
+
+		// DPW Sawtooth is generated from two sawooth waveforms
 
 		sawtoothOne.generateSamples(f0);
 		sawtoothTwo.generateSamples(f0);

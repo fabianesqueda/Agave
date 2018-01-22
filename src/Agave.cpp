@@ -20,7 +20,7 @@ void init(rack::Plugin *p) {
 	// For each module, specify the ModuleWidget subclass, manufacturer slug (for saving in patches), manufacturer human-readable name, module slug, and module name
 	p->addModel(createModel<AgaveTestEngineWidget>("Agave", "AgaveTestEngine", "Test Engine", UTILITY_TAG));
 	p->addModel(createModel<LowpassFilterBankWidget>("Agave", "LowpassFilterBank", "Lowpass Filter Bank", FILTER_TAG));
-	p->addModel(createModel<WavefolderWidget>("Agave", "Wavefolder", "Wavefolder", WAVESHAPER_TAG));
+	p->addModel(createModel<SharpWavefolderWidget>("Agave", "SharpWavefolder", "Fxld", WAVESHAPER_TAG));
 	p->addModel(createModel<MetallicNoiseWidget>("Agave", "MetallicNoise", "Metallic Noise Generator", NOISE_TAG));
 
 	// Any other plugin initialization may go here.

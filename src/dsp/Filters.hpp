@@ -37,17 +37,17 @@ public:
 
 	void setCutoff(const float &cutoffFrequency, const float &sampleRate) {
 
-		float wa = 2*M_PI*cutoffFrequency; 			// analog cutoff freq
-		wc = 2*atan(0.5*wa/sampleRate)*sampleRate;	// digital cutoff freq
+		float wa = 2.0f*M_PI*cutoffFrequency; 					// analog cutoff freq
+		wc = 2.0f*std::atan(0.5f*wa/sampleRate)*sampleRate;		// digital cutoff freq
 	
 	}
 
 	void process(const float &input, const float &sampleRate) {
 
-		float alpha = 2*sampleRate/wc;
+		float alpha = 2.0f*sampleRate/wc;
 
 		// Compute filter output
-		lowpassOutput = ( (alpha - 1)*lowpassOutput + input + previousInput ) / (1 + alpha);
+		lowpassOutput = ( (alpha - 1.0f)*lowpassOutput + input + previousInput ) / (1.0f + alpha);
 		highpassOutput = input - lowpassOutput;
 
 		// Update State
