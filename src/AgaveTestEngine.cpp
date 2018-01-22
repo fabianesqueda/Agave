@@ -48,9 +48,8 @@ void AgaveTestEngine::step() {
 	float deltaTime = 1.0 / SR;
 
 	// Compute the frequency from the pitch parameter and input
-	// TODO: Convert to log. Linear frequency pots suck.
 	float pitch = params[PITCH_PARAM].value;
-	pitch = clampf(pitch, -4.0, 4.0);
+	pitch = clampf(pitch, -15.0, 4.0);
 	float freq = 440.0 * powf(2.0, pitch);
 
 	// Accumulate the phase
@@ -90,7 +89,7 @@ AgaveTestEngineWidget::AgaveTestEngineWidget() {
 	}
 
 	// KNOB
-	addParam(createParam<Davies1900hBlackKnob>(Vec(13, 87), module, AgaveTestEngine::PITCH_PARAM, -3.0, 3.0, 0.0));
+	addParam(createParam<Davies1900hBlackKnob>(Vec(13, 87), module, AgaveTestEngine::PITCH_PARAM, -15.0, 4.0, -2.5));
 
 	// SINE OUTPUT
 	addOutput(createOutput<PJ301MPort>(Vec(18, 180), module, AgaveTestEngine::SINE_OUTPUT));

@@ -20,24 +20,26 @@ class RCFilter {
 	// TODO: Investigate how does Rack deal with changes in Sampling Rate and find optimal location
 	// pre-warping of the cutoff frequency.
 
-public:
-
+private:
 	float lowpassOutput = 0.0;
 	float highpassOutput = 0.0;
 	float previousInput = 0.0;
 	float wc = 0.0;
 
-	RCFilter() { }
-
+	RCFilter() {}
+	RCFilter(float cutoffFrequency, float sampleRate) { setCutoff(cutoffFrequency, sampleRate); }
 	~RCFilter() { }
 
-	void setCutoff(float cutoffFrequency, float sampleRate) {
+public:
 
-		wc = 2*M_PI*cutoffFrequency; 				// wc in radians/second
-		wc = 2*atan(0.5*wc/sampleRate)*sampleRate;	// Cutoff pre-warping
+	void setCutoff(const float &cutoffFrequency, const float &sampleRate) {
+
+		float wa = 2*M_PI*cutoffFrequency; 			// analog cutoff freq
+		wc = 2*atan(0.5*wa/sampleRate)*sampleRate;	// digital cutoff freq
+	
 	}
 
-	void process(float input, float sampleRate) {
+	void process(const float &input, const float &sampleRate) {
 
 		float alpha = 2*sampleRate/wc;
 
@@ -48,5 +50,13 @@ public:
 		// Update State
 		previousInput = input;
 
+	}
+
+	float getLowpassOutput() {
+		return lowpassOutput;
+	}
+
+	float getHighpassOutput() {
+		return highpassOutput;
 	}
 };

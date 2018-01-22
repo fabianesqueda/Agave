@@ -39,7 +39,7 @@ struct LowpassFilterBank : Module {
 
 	LowpassFilterBank() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
 		for (int i = 0; i < 6; i++) {
-			filter[i].setCutoff(cutoffFrequencies[i], engineGetSampleRate());
+			filter[i] = RCFilter(cutoffFrequencies[i], engineGetSampleRate());
 		}
 	}
 
@@ -58,22 +58,22 @@ void LowpassFilterBank::step() {
 	float input = inputs[SIGNAL_INPUT].value;
 
 	filter[0].process(input, engineGetSampleRate());
-	outputs[FILTER_LOW_OUTPUT].value = filter[0].lowpassOutput;
+	outputs[FILTER_LOW_OUTPUT].value = filter[0].getLowpassOutput();
 
 	filter[1].process(input, engineGetSampleRate());
-	outputs[FILTER_198_OUTPUT].value = filter[1].lowpassOutput;
+	outputs[FILTER_198_OUTPUT].value = filter[1].getLowpassOutput();
 
 	filter[2].process(input, engineGetSampleRate());
-	outputs[FILTER_373_OUTPUT].value = filter[2].lowpassOutput;
+	outputs[FILTER_373_OUTPUT].value = filter[2].getLowpassOutput();
 
 	filter[3].process(input, engineGetSampleRate());
-	outputs[FILTER_692_OUTPUT].value = filter[3].lowpassOutput;
+	outputs[FILTER_692_OUTPUT].value = filter[3].getLowpassOutput();
 
 	filter[4].process(input, engineGetSampleRate());
-	outputs[FILTER_1411_OUTPUT].value = filter[4].lowpassOutput;
+	outputs[FILTER_1411_OUTPUT].value = filter[4].getLowpassOutput();
 
 	filter[5].process(input, engineGetSampleRate());
-	outputs[FILTER_HIGH_OUTPUT].value = filter[5].lowpassOutput;
+	outputs[FILTER_HIGH_OUTPUT].value = filter[5].getLowpassOutput();
 
 }
 

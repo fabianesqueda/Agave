@@ -38,3 +38,5 @@ Makefile
 *.app
 
 Wavefolder.cpp
+Wavefolder2.cpp
+dist
