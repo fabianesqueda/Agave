@@ -25,7 +25,9 @@ class DPWSawtooth {
 
 private:
 
-	float sampleRate{engineGetSampleRate()};
+	// Default sample rate. Use constructor to overwrite.
+	float sampleRate = 44100.0;
+
 	float state = 0.0;
 	float phase = 0.0;
 	float output = 0.0;
@@ -33,11 +35,18 @@ private:
 public:
 
 	DPWSawtooth() {}
+	DPWSawtooth(float SR) : sampleRate(SR) {}
 	~DPWSawtooth() {}
 
-	void overridePhase(const float &newPhase) { phase = newPhase; }
+	void setSampleRate(float SR) {
+		sampleRate = SR;
+	}
 
-	void generateSamples(const float &f0) {
+	void overridePhase(float newPhase) {
+		phase = newPhase; 
+	}
+
+	void generateSamples(float f0) {
 
 		// Implement DPW algorithm
 		float delta = f0/sampleRate;
@@ -52,6 +61,7 @@ public:
 		phase += delta;
 		if (phase >= 1.0f)
 			phase -= 1.0f;
+
 	}
 
 	float getSawtoothWaveform() {
@@ -72,12 +82,21 @@ private:
 public:
 
 	DPWSquare() { sawtoothTwo.overridePhase(0.5f); }
+	DPWSquare(float SR) {
+		sawtoothTwo.overridePhase(0.5f);
+		setSampleRate(SR); 
+	}
+
 	~DPWSquare() {}
 
-	void generateSamples(const float &f0) {
+	void setSampleRate(float SR) {
+		sawtoothOne.setSampleRate(SR);
+		sawtoothTwo.setSampleRate(SR);
+	}
+
+	void generateSamples(float f0) {
 
 		// DPW Sawtooth is generated from two sawooth waveforms
-
 		sawtoothOne.generateSamples(f0);
 		sawtoothTwo.generateSamples(f0);
 		output = sawtoothOne.getSawtoothWaveform() - sawtoothTwo.getSawtoothWaveform();

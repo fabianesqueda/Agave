@@ -24,57 +24,59 @@ struct AgaveTestEngine : Module {
 		NUM_LIGHTS
 	};
 
+	float sampleRate = engineGetSampleRate();
+
 	float phase = 0.0;
 	float blinkPhase = 0.0;
 
-	DPWSawtooth sawtoothGenerator;
-
-	DPWSquare squareWaveGenerator;
+	DPWSawtooth sawtoothGenerator{sampleRate};
+	DPWSquare squareWaveGenerator{sampleRate};
 
 	AgaveTestEngine() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
 	void step() override;
-
-	// For more advanced Module features, read Rack's engine.hpp header file
-	// - toJson, fromJson: serialization of internal data
-	// - onSampleRateChange: event triggered by a change of sample rate
-	// - onReset, onRandomize, onCreate, onDelete: implements special behavior when user clicks these from the context menu
+	void onSampleRateChange() override;
 };
 
 
 void AgaveTestEngine::step() {
 
-	float SR = engineGetSampleRate();
 
 	// Implement a simple sine oscillator
-	float deltaTime = 1.0 / SR;
+	float deltaTime = 1.0f / sampleRate;
 
-	// Compute the frequency from the pitch parameter and input
+	// Compute the frequency from the pitch parameter
 	float pitch = params[PITCH_PARAM].value;
-	pitch = clampf(pitch, -15.0, 4.0);
-	float freq = 440.0 * powf(2.0, pitch);
+	pitch = clampf(pitch, -4.0f, 4.0f);
+	float freq = 440.0f * std::pow(2.0f, pitch);
 
 	// Accumulate the phase
 	phase += freq * deltaTime;
-	if (phase >= 1.0)
-		phase -= 1.0;
+	if (phase >= 1.0f)
+		phase -= 1.0f;
 
 	// Compute the sine output
-	float sine = (sinf(2 * M_PI * phase));
+	float sine = (std::sin(2.0f * M_PI * phase));
 
 	// Output sine
-	outputs[SINE_OUTPUT].value = 5.0 * sine;
+	outputs[SINE_OUTPUT].value = 5.0f * sine;
 
 	// Output sawtooth
 	sawtoothGenerator.generateSamples(freq);
-	outputs[SAW_OUTPUT].value = 5.0 * sawtoothGenerator.getSawtoothWaveform();
+	outputs[SAW_OUTPUT].value = 5.0f * sawtoothGenerator.getSawtoothWaveform();
 
 	// Output square wave
 	squareWaveGenerator.generateSamples(freq);
-	outputs[SQUARE_OUTPUT].value = 5.0 * squareWaveGenerator.getSquareWaveform();
+	outputs[SQUARE_OUTPUT].value = 5.0f * squareWaveGenerator.getSquareWaveform();
 
 	// Generate white noise
-	outputs[NOISE_OUTPUT].value = 5.0 * (2.0 * randomf() - 1.0);
+	outputs[NOISE_OUTPUT].value = 5.0f * (2.0f * randomf() - 1.0f);
 
+}
+
+void AgaveTestEngine::onSampleRateChange() {
+	sampleRate = engineGetSampleRate();
+	sawtoothGenerator.setSampleRate(sampleRate);
+	squareWaveGenerator.setSampleRate(sampleRate);
 }
 
 AgaveTestEngineWidget::AgaveTestEngineWidget() {
@@ -90,7 +92,7 @@ AgaveTestEngineWidget::AgaveTestEngineWidget() {
 	}
 
 	// KNOB
-	addParam(createParam<Davies1900hBlackKnob>(Vec(13, 87), module, AgaveTestEngine::PITCH_PARAM, -15.0, 4.0, -2.5));
+	addParam(createParam<Davies1900hBlackKnob>(Vec(13, 87), module, AgaveTestEngine::PITCH_PARAM, -4.0, 4.0, 0.0));
 
 	// SINE OUTPUT
 	addOutput(createOutput<PJ301MPort>(Vec(18, 180), module, AgaveTestEngine::SINE_OUTPUT));

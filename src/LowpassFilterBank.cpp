@@ -5,9 +5,10 @@
 // THIS CODE IS PROVIDED "AS-IS", WITH NO GUARANTEE OF ANY KIND.
 // 
 // CODED BY F. ESQUEDA - JANUARY 2018
+#include <array>
+#include <iostream>
 
 #include "Agave.hpp"
-#include <iostream>
 
 #include "dsp/Filters.hpp"
 
@@ -33,22 +34,23 @@ struct LowpassFilterBank : Module {
 		NUM_LIGHTS
 	};
 
-	// Six-band filter bank
-	RCFilter filter[NUM_OUTPUTS];
+	float sampleRate = engineGetSampleRate();
+
+	// Declare array of filters
+	std::array<RCFilter, NUM_OUTPUTS> filters;
 
 	// In Hz
-	float cutoffFrequencies[6] = {78.0, 198.0, 373.0, 692.0, 1411.0, 3.0e3};
+	std::array<float, 6> cutoffFrequencies = {{78.0, 198.0, 373.0, 692.0, 1411.0, 3.0e3}};
 
 	LowpassFilterBank() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
-		for (int i = 0; i < NUM_OUTPUTS; i++) {
-			filter[i] = RCFilter(cutoffFrequencies[i], engineGetSampleRate());
+		for (int i = 0; i < NUM_OUTPUTS; i++) { 
+			filters[i] = RCFilter(cutoffFrequencies[i], sampleRate); 
 		}
 	}
 
 	void step() override;
-
+	void onSampleRateChange() override;
 	// TODO: reset()
-	// TODO: onSampleRateChange()
 
 };
 
@@ -58,10 +60,16 @@ void LowpassFilterBank::step() {
 	float input = inputs[SIGNAL_INPUT].value;
 
 	for (int i=0; i<NUM_OUTPUTS; i++) {
-		filter[i].process(input, engineGetSampleRate());
-		outputs[i].value = filter[i].getLowpassOutput();		
+		filters[i].process(input);
+		outputs[i].value = filters[i].getLowpassOutput();
 	}
 
+}
+
+void LowpassFilterBank::onSampleRateChange() {
+	sampleRate = engineGetSampleRate();
+	for(auto & filter : filters)
+		filter.setSampleRate(sampleRate);
 }
 
 LowpassFilterBankWidget::LowpassFilterBankWidget() {
