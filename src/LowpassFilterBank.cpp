@@ -5,10 +5,9 @@
 // THIS CODE IS PROVIDED "AS-IS", WITH NO GUARANTEE OF ANY KIND.
 // 
 // CODED BY F. ESQUEDA - JANUARY 2018
-#include <array>
-#include <iostream>
-
 #include "Agave.hpp"
+#include <iostream>
+#include <array>
 
 #include "dsp/Filters.hpp"
 

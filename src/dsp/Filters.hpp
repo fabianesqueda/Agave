@@ -7,7 +7,6 @@
 // ADAPTED FOR VCV RACK JANUARY 2018
 // 
 // TODO: 
-// 		HANDLE CHANGES IN SAMPLE RATE
 // 		ADD MORE STANDARD FILTERS
 #pragma once
 
@@ -22,7 +21,7 @@ private:
 	// Default parameters. Use constructor to overwrite.
 	float sampleRate = 44100.0;
 	float fc = 1.0e3;
-
+	
 	float previousInput = 0.0;
 	float wc = 0.0;
 	float lowpassOutput = 0.0;

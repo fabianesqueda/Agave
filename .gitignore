@@ -39,6 +39,6 @@ Makefile
 *.app
 
 # Specific Files
-Wavefolder.cpp
 Wavefolder_Soft
-SharpWavefolder.cpp
+res/GrayPanel.svg
+res/RedPanel.svg
