@@ -6,7 +6,7 @@ For the time being, these modules are only available via this repository. They h
 
 ## FΛLDER
 
-This module implements a "wavefolding" operation on the incoming signal. Wavefolding is a operation in which signal values that exceed certain treshold are inverted or folded back (hence the name of the effect). When driven by a signal with low harmonic content (e.g. a sinusoid or triangular oscillator) this module generates complex harmonically-rich waveforms, making it ideal for a West Coast patch. The sharp folds introduced by this module are inspired by the timbre section of the iconic Buchla 259 complex oscillator.
+This module implements a "wavefolding" operation on the incoming signal. Wavefolding is a operation in which signal values that exceed certain treshold are inverted or folded back (hence the name of the effect). When driven by a signal with low harmonic content (e.g. a sinusoid or triangular oscillator) this module generates complex harmonically-rich waveforms, making it ideal for a West Coast-style patch.
 
 ## METALLICO
 
