@@ -47,7 +47,7 @@ struct SharpWavefolder : Module {
 
 	HardClipper clipper;
 
-	SharpWavefolder() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) { }
+	SharpWavefolder() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
 
 	void step() override;
 	void onSampleRateChange() override;
