@@ -18,18 +18,19 @@
 // TODO: 
 // 		ADD PULSE WIDTH DEFINITON FOR SQUARE WAVE
 
-#pragma once
+#ifndef DPWOSC_H
+#define DPWOSC_H 
 
 class DPWSawtooth {
 
 private:
 
 	// Default sample rate. Use constructor to overwrite.
-	float sampleRate = 44100.0;
+	float sampleRate = 44100.0f;
 
-	float state = 0.0;
-	float phase = 0.0;
-	float output = 0.0;
+	float state = 0.0f;
+	float phase = 0.0f;
+	float output = 0.0f;
 
 public:
 
@@ -73,7 +74,7 @@ class DPWSquare {
 
 private:
 
-	float output = 0.0;
+	float output = 0.0f;
 
 	DPWSawtooth sawtoothOne;
 	DPWSawtooth sawtoothTwo;
@@ -106,5 +107,7 @@ public:
 	}
 
 };
+
+#endif 
 
 // EOF

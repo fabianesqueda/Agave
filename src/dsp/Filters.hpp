@@ -8,29 +8,32 @@
 // 
 // TODO: 
 // 		ADD MORE STANDARD FILTERS
-#pragma once
+#ifndef FILTERS_H
+#define FILTERS_H 
 
 class RCFilter {
-
 // THIS CLASS IMPLEMENTES AN LTI FIRST-ORDER LOWPASS FILTER DERIVED FROM THE TRANSFER FUNCTION 
 // OF A SIMPLE PASSIVE RC FILTER. THE FILTER IS PARAMETRIZED BY SETTING THE CUTOFF FREQUENCY IN HZ
 // I.E. fc = 1 / (2*pi*R*C)
-
+// 
+// Usage example:
+// 	RCFilter filter(100.0f,44100.0f);
+// 	filter.process(x);
+// 	filter.getLowpassOutput();
+// 
 private:
 
-	// Default parameters. Use constructor to overwrite.
-	float sampleRate = 44100.0;
-	float fc = 1.0e3;
-	
-	float previousInput = 0.0;
-	float wc = 0.0;
-	float lowpassOutput = 0.0;
-	float highpassOutput = 0.0;
+	float sampleRate  = 44.1e3f;
+	float fc = 1.0e3f; 	// Cutoff frequency (in Hz)
+	float wc;			// Cutoff frequency (in rad/sec)
 
+	float previousInput = 0.0f;
+	float lowpassOutput = 0.0f;
+	float highpassOutput = 0.0f;
 
 public:
 
-	RCFilter() {}
+	RCFilter() { setCutoff(); }
 	RCFilter(float cutoffFrequency, float SR) { 
 		fc = cutoffFrequency;
 		sampleRate = SR;
@@ -70,24 +73,21 @@ public:
 	}
 };
 
-
 class DCBlocker {
 
 // THIS CLASS IMPLEMENTES AN LTI IIR DC BLOCKER BASED ON J. PEKONEN'S DESIGN, DESCRIBED IN
 // "FILTER-BASED ALIAS REDUCTION FOR DIGITAL CLASSICAL WAVEFORM SYNTHESIS" (ICASSP 2008)
-
+// 
 private: 
 
 	// Default parameters. Use constructor to overwrite.
-	float sampleRate = 44100.0;
-	float fc = 10.0;
+	float sampleRate = 44.1e3f;
+	float fc = 1.0e3f;
 
-	float xState = 0.0;
-	float yState = 0.0;
-	float p = 0.0;
-
-	float output = 0.0;
-
+	float xState = 0.0f;
+	float yState = 0.0f;
+	float p = 0.0f;
+	float output = 0.0f;
 
 public:
 
@@ -121,6 +121,8 @@ public:
 	float getFilteredOutput() {
 		return output;
 	}
-
 };
+
+#endif 
+
 

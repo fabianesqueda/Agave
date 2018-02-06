@@ -11,7 +11,8 @@
 // 
 // TODO: 
 // 		ADD MORE STANDARD FILTERS
-#pragma once
+#ifndef WAVESHAPING_H
+#define WAVESHAPING_H 
 
 class HardClipper {
 
@@ -193,10 +194,10 @@ public:
 
 };
 
-class SoftSaturator {
+class SoftClipper {
 
-// THIS CLASS IMPLEMENTS AN ANTIALIASED SOFT CLIPPING TANH() FUNCTION.
-// THIS CLASS USES THE FIRST-ORDER ANTIDERIVATIVE METHOD.
+// THIS CLASS IMPLEMENTS A PIECEWISE SOFT SATURATOR WITH 
+// FIRST-ORDER ANTIDERIVATIVE ANTIALIASING.
 
 private:
 
@@ -209,22 +210,27 @@ private:
 	const float thresh = 10.0e-2;
 
 public:
-	SoftSaturator() {}
-	~SoftSaturator() {}
+	SoftClipper() {}
+	~SoftClipper() {}
 
 	void process(float input) {
 		output = antialiasedSoftClipN1(input);
 	}
 
+	float signum(float x) {
+		return (x > 0.0f) ? 1.0f : ((x < 0.0f) ? -1.0f : 0.0f);
+	}
+
 	float softClipN0(float x) {
-		return std::tanh(x);
+		return (std::abs(x)<1) ? std::sin(0.5f*M_PI*x) : signum(x); 
 	}
 
 	float softClipN1(float x) {
-		return std::log(std::cosh(x));
+		
+		return (std::abs(x)<1) ? 1.0f - (2.0f/M_PI)*cos(x*0.5f*M_PI) : signum(x)*x;
 	}
 
-	float antialiasedSoftClipN1(const float &x) {
+	float antialiasedSoftClipN1(float x) {
 
 		Fn = softClipN1(x);
 		float tmp = 0.0;
@@ -242,9 +248,11 @@ public:
 		return tmp;
 	}
 
-	float getSaturatedOutput() {
+	float getClippedOutput() {
 		return output;
 	}
 };
+
+#endif 
 
 // EOF

@@ -5,10 +5,10 @@
 // THIS CODE IS PROVIDED "AS-IS", WITH NO GUARANTEE OF ANY KIND.
 // 
 // CODED BY F. ESQUEDA - JANUARY 2018
-#include "Agave.hpp"
 #include <iostream>
 #include <array>
 
+#include "Agave.hpp"
 #include "dsp/Filters.hpp"
 
 struct LowpassFilterBank : Module {
@@ -39,12 +39,19 @@ struct LowpassFilterBank : Module {
 	std::array<RCFilter, NUM_OUTPUTS> filters;
 
 	// In Hz
-	std::array<float, 6> cutoffFrequencies = {{78.0, 198.0, 373.0, 692.0, 1411.0, 3.0e3}};
+	std::array<float, NUM_OUTPUTS> cutoffFrequencies = {{78.0f, 198.0f, 373.0f, 692.0f, 1411.0f, 3.0e3f}};
 
+	// Derived class constructor
 	LowpassFilterBank() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
-		for (int i = 0; i < NUM_OUTPUTS; i++) { 
-			filters[i] = RCFilter(cutoffFrequencies[i], sampleRate); 
+		
+		// Initialize filters
+		auto *fc = begin(cutoffFrequencies);
+		for (auto &filter : filters) {
+			filter = RCFilter(*fc, sampleRate);
+			if (fc != end(cutoffFrequencies))
+				++fc;
 		}
+
 	}
 
 	void step() override;
@@ -56,19 +63,25 @@ struct LowpassFilterBank : Module {
 
 void LowpassFilterBank::step() {
 
+	// Read input sample
 	float input = inputs[SIGNAL_INPUT].value;
 
-	for (int i=0; i<NUM_OUTPUTS; i++) {
-		filters[i].process(input);
-		outputs[i].value = filters[i].getLowpassOutput();
+	// Send input to all filters
+	int idx = 0;
+	for (auto &filter : filters) {
+		filter.process(input);
+		outputs[idx].value = filter.getLowpassOutput();
+		if (idx != NUM_OUTPUTS)
+			++idx;
 	}
 
 }
 
 void LowpassFilterBank::onSampleRateChange() {
-	sampleRate = engineGetSampleRate();
-	for(auto & filter : filters)
-		filter.setSampleRate(sampleRate);
+
+	for(auto &filter : filters)
+		filter.setSampleRate(engineGetSampleRate());
+
 }
 
 LowpassFilterBankWidget::LowpassFilterBankWidget() {
@@ -86,7 +99,7 @@ LowpassFilterBankWidget::LowpassFilterBankWidget() {
 	// SIGNAL INPUT
 	addInput(createInput<PJ301MPort>(Vec(18, 20), module, LowpassFilterBank::SIGNAL_INPUT));
 
-	// SINE OUTPUT
+	// FILTERED OUTPUTS
 	addOutput(createOutput<PJ301MPort>(Vec(18, 80), module, LowpassFilterBank::FILTER_LOW_OUTPUT));
 	addOutput(createOutput<PJ301MPort>(Vec(18, 130), module, LowpassFilterBank::FILTER_198_OUTPUT));
 	addOutput(createOutput<PJ301MPort>(Vec(18, 180), module, LowpassFilterBank::FILTER_373_OUTPUT));
