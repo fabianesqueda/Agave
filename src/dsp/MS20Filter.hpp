@@ -8,12 +8,12 @@
 // 
 // TODO: 
 // 		ADD MORE STANDARD FILTERS
-#ifndef MS20FilterTrap_H
-#define MS20FilterTrap_H
+#ifndef MS20Filter_H
+#define MS20Filter_H
 
 #include <array>
 
-class MS20FilterTrap {
+class MS20Filter {
 
 private:
 
@@ -47,12 +47,12 @@ private:
 	float a2_n1 = 0.0;
 
 public: 
-	MS20FilterTrap() {}
-	MS20FilterTrap(float SR) {
+	MS20Filter() {}
+	MS20Filter(float SR) {
 		sampleRate = SR;
 		T = 1.0f/SR;
 	}
-	~MS20FilterTrap() {}
+	~MS20Filter() {}
 
 	void setSampleRate(float SR) {
 		sampleRate = SR;
