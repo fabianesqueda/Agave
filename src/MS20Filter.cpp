@@ -51,7 +51,7 @@ void MS20VCF::step() {
 	float input = inputs[SIGNAL_INPUT].value;
 	input = clampf(input, -6.0f, 6.0f);
 
-	// Add -60dB noise to bootstrap self-oscillation
+	// Add noise to bootstrap self-oscillation
 	input += 1.0e-2f * (2.0f*randomf() - 1.0f);
 
 	// Original MS20 used 4.0V pkk
