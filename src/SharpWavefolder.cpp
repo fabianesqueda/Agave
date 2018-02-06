@@ -13,7 +13,6 @@
 #include <iostream>
 #include <array>
 
-#include "dsp/Filters.hpp"
 #include "dsp/Waveshaping.hpp"
 
 struct SharpWavefolder : Module {

@@ -22,6 +22,7 @@ void init(rack::Plugin *p) {
 	p->addModel(createModel<LowpassFilterBankWidget>("Agave", "LowpassFilterBank", "Lowpass Filter Bank", FILTER_TAG));
 	p->addModel(createModel<SharpWavefolderWidget>("Agave", "SharpWavefolder", "Fxld", WAVESHAPER_TAG));
 	p->addModel(createModel<MetallicNoiseWidget>("Agave", "MetallicNoise", "Metallic Noise Generator", NOISE_TAG));
+	p->addModel(createModel<MS20VCFWidget>("Agave", "MS20VCF", "VCF", FILTER_TAG));
 
 	// Any other plugin initialization may go here.
 	// As an alternative, consider lazy-loading assets and lookup tables when your module is created to reduce startup times of Rack.

@@ -11,7 +11,8 @@
 // 
 // TODO: 
 // 		ADD MORE STANDARD FILTERS
-#pragma once
+#ifndef WAVESHAPING_H
+#define WAVESHAPING_H 
 
 class HardClipper {
 
@@ -251,5 +252,7 @@ public:
 		return output;
 	}
 };
+
+#endif 
 
 // EOF

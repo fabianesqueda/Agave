@@ -25,3 +25,7 @@ struct MetallicNoiseWidget : ModuleWidget {
 	MetallicNoiseWidget();
 };
 
+struct MS20VCFWidget : ModuleWidget {
+	MS20VCFWidget();
+};
+

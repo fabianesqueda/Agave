@@ -44,13 +44,13 @@ struct MetallicNoise : Module {
 	std::array<DPWSquare, 6> squareWaves606;
 
 	// Define fundamental frequencies
-	std::array<float, 6> oscFrequencies808 = {{205.3, 369.4, 304.4, 522.3, 800.0, 540.4}};
-	std::array<float, 6> oscFrequencies606 = {{244.4, 304.6, 364.5, 412.1, 432.4, 604.1}};
+	std::array<float, 6> oscFrequencies808 = {{205.3f, 369.4f, 304.4f, 522.3f, 800.0f, 540.4f}};
+	std::array<float, 6> oscFrequencies606 = {{244.4f, 304.6f, 364.5f, 412.1f, 432.4f, 604.1f}};
 
 	MetallicNoise() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
-		for(auto & squareWave : squareWaves808)
+		for(auto &squareWave : squareWaves808)
 			squareWave.setSampleRate(sampleRate);
-		for(auto & squareWave : squareWaves606)
+		for(auto &squareWave : squareWaves606)
 			squareWave.setSampleRate(sampleRate);
 	}
 
@@ -63,13 +63,15 @@ struct MetallicNoise : Module {
 
 void MetallicNoise::step() {
 
-	float output808 = 0.0;
+	// 808 Noise
+	float output808 = 0.0f;
 	for (int i=0; i<6; i++) {
 		squareWaves808[i].generateSamples(oscFrequencies808[i]);
 		output808 += squareWaves808[i].getSquareWaveform();
 	}
 	outputs[NOISE_808_OUTPUT].value = 5.0f * 0.1666f * output808;
 
+	// 606 Noise
 	float output606 = 0.0;
 	for (int i=0; i<6; i++) {
 		squareWaves606[i].generateSamples(oscFrequencies606[i]);
@@ -80,11 +82,10 @@ void MetallicNoise::step() {
 }
 
 void MetallicNoise::onSampleRateChange() {
-	sampleRate = engineGetSampleRate();
 	for(auto & squareWave : squareWaves808)
-		squareWave.setSampleRate(sampleRate);
+		squareWave.setSampleRate(engineGetSampleRate());
 	for(auto & squareWave : squareWaves606)
-		squareWave.setSampleRate(sampleRate);
+		squareWave.setSampleRate(engineGetSampleRate());
 }
 
 MetallicNoiseWidget::MetallicNoiseWidget() {
