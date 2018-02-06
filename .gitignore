@@ -42,6 +42,3 @@ Makefile
 Wavefolder_Soft
 res/GrayPanel.svg
 res/RedPanel.svg
-dsp/MS20Filter.hpp
-dsp/MSFilterTrap.hpp
-MS20Filter.cpp
